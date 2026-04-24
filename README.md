@@ -58,6 +58,29 @@ Copy `.env.example` and provide:
 - `DJANGO_DEBUG`
 - `DJANGO_ALLOWED_HOSTS`
 
+## Vercel deploy
+
+Frontend project:
+
+- root directory: `.`
+- framework: Vite
+- uses [vercel.json](/Users/dt/Desktop/codex/dover/vercel.json)
+- env: `VITE_API_BASE_URL=https://your-backend-project.vercel.app`
+
+Backend project:
+
+- root directory: `backend`
+- zero-config Django deployment on Vercel
+- uses [backend/vercel.json](/Users/dt/Desktop/codex/dover/backend/vercel.json)
+- envs:
+  - `DJANGO_SECRET_KEY`
+  - `DJANGO_DEBUG=false`
+  - `DJANGO_ALLOWED_HOSTS=.vercel.app`
+  - `DJANGO_CSRF_TRUSTED_ORIGINS=https://your-frontend-project.vercel.app`
+  - `CORS_ALLOWED_ORIGINS=https://your-frontend-project.vercel.app`
+  - `DATABASE_URL=postgresql://...`
+  - `DATABASE_SSLMODE=require`
+
 ## Notes
 
 - `.gitignore` excludes local databases, virtualenvs, build output, and `.env` files.

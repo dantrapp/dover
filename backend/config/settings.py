@@ -16,7 +16,6 @@ from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = BASE_DIR.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +29,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true'
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,.vercel.app').split(',')
     if host.strip()
 ]
 
@@ -146,7 +145,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-PLANNER_DATASET_PATH = PROJECT_ROOT / 'dover_cost_per_hire.csv'
+PLANNER_DATASET_PATH = Path(
+    os.environ.get('PLANNER_DATASET_PATH', BASE_DIR / 'dover_cost_per_hire.csv')
+)
 
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
