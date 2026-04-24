@@ -33,7 +33,6 @@ export default function App() {
   const [form, setForm] = useState<PlannerForm>(initialForm);
   const [result, setResult] = useState<PlannerResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
@@ -92,23 +91,22 @@ export default function App() {
       <section className="hero-grid">
         <div className="hero-copy">
           <div className="eyebrow">Dover Hiring Planner</div>
-          <h1>Self-serve planning for your next critical hire.</h1>
+          <h1>Plan the next hire before you open the search.</h1>
           <p className="hero-body">
-            Turn Dover&rsquo;s marketplace data into a real decision: expected cost, comparable hires,
-            and the recruiter profile most likely to help you move fast.
+            Cost range, comparable hires, and who to pull in first.
           </p>
           <div className="hero-metrics">
             <div className="metric-card">
-              <span className="metric-label">Marketplace hires</span>
+              <span className="metric-label">Marketplace data</span>
               <strong>901</strong>
             </div>
             <div className="metric-card">
-              <span className="metric-label">Recruiter network</span>
+              <span className="metric-label">Recruiter profiles</span>
               <strong>60+</strong>
             </div>
             <div className="metric-card">
-              <span className="metric-label">Use case</span>
-              <strong>Founder-first</strong>
+              <span className="metric-label">Decision speed</span>
+              <strong>Under 1 min</strong>
             </div>
           </div>
         </div>
@@ -117,7 +115,7 @@ export default function App() {
           <div className="panel-header">
             <div>
               <p className="panel-kicker">What are you hiring for?</p>
-              <h2>Build a hiring plan in under a minute.</h2>
+              <h2>Get a fast read on the market.</h2>
             </div>
           </div>
 
@@ -235,7 +233,7 @@ export default function App() {
           <div className="results-stack">
             <article className="summary-card">
               <div>
-                <p className="summary-label">Hiring plan</p>
+                <p className="summary-label">Search snapshot</p>
                 <h3>
                   {result.query.roleTitle} for a {stageLabel.toLowerCase()} in {result.query.companyLocation}
                 </h3>
@@ -246,14 +244,6 @@ export default function App() {
                 </p>
               ) : null}
               <p>{result.summary}</p>
-              <button
-                type="button"
-                className="ghost-button"
-                onClick={() => setMethodologyOpen((current) => !current)}
-              >
-                {methodologyOpen ? 'Hide methodology' : 'Why this benchmark'}
-              </button>
-              {methodologyOpen ? <p className="methodology-copy">{result.methodology}</p> : null}
             </article>
 
             <div className="benchmark-grid">
@@ -261,7 +251,7 @@ export default function App() {
                 <p className="summary-label">Expected cost</p>
                 <div className="benchmark-number">{result.benchmark.median}</div>
                 <p className="benchmark-caption">
-                  Median marketplace cost for this search profile
+                  Median marketplace cost for this search
                 </p>
                 <div className="range-bar">
                   <span>{result.benchmark.low}</span>
@@ -269,19 +259,22 @@ export default function App() {
                 </div>
               </article>
 
-              <article className="mini-stat">
-                <span className="mini-label">Confidence</span>
-                <strong>{result.benchmark.confidenceLabel}</strong>
-              </article>
-
-              <article className="mini-stat">
-                <span className="mini-label">Sample size</span>
-                <strong>{result.benchmark.sampleSize} hires</strong>
-              </article>
-
-              <article className="mini-stat">
-                <span className="mini-label">Priority</span>
-                <strong>{result.query.hiringPriority}</strong>
+              <article className="mini-stat detail-card">
+                <p className="summary-label">Search details</p>
+                <ul className="detail-list">
+                  <li>
+                    <span className="detail-term">Confidence</span>
+                    <strong>{result.benchmark.confidenceLabel}</strong>
+                  </li>
+                  <li>
+                    <span className="detail-term">Sample size</span>
+                    <strong>{result.benchmark.sampleSize} hires</strong>
+                  </li>
+                  <li>
+                    <span className="detail-term">Priority</span>
+                    <strong>{result.query.hiringPriority}</strong>
+                  </li>
+                </ul>
               </article>
             </div>
 
@@ -289,9 +282,9 @@ export default function App() {
               <div className="section-heading">
                 <div>
                   <p className="summary-label">Comparable hires</p>
-                  <h3>Closest marketplace signals</h3>
+                  <h3>Closest matches</h3>
                 </div>
-                <span className="trust-pill">Real Dover marketplace data</span>
+                <span className="trust-pill">901 live rows</span>
               </div>
 
               <div className="comparables-list">

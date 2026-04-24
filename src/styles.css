@@ -1,16 +1,17 @@
 :root {
   color-scheme: light;
-  --bg: #f5f1e8;
-  --panel: rgba(255, 255, 255, 0.8);
+  --bg: #f4f7f6;
+  --panel: rgba(255, 255, 255, 0.86);
   --panel-strong: #ffffff;
-  --line: rgba(10, 44, 36, 0.12);
-  --text: #11352d;
-  --muted: #5f766d;
-  --accent: #0d6b57;
-  --cta: #d9752f;
-  --cta-strong: #b75e1f;
-  --accent-soft: rgba(13, 107, 87, 0.12);
-  --shadow: 0 20px 80px rgba(17, 53, 45, 0.12);
+  --line: rgba(24, 40, 37, 0.1);
+  --text: #1a2725;
+  --muted: #647571;
+  --accent: #69d8c3;
+  --accent-strong: #26b79e;
+  --accent-soft: rgba(105, 216, 195, 0.18);
+  --cta: #ff8b4a;
+  --cta-strong: #ec6d2b;
+  --shadow: 0 24px 72px rgba(37, 64, 58, 0.08);
   font-family:
     "Suisse Intl",
     "Avenir Next",
@@ -20,8 +21,9 @@
   font-weight: 400;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(247, 214, 169, 0.35), transparent 32%),
-    radial-gradient(circle at top right, rgba(104, 182, 157, 0.15), transparent 28%),
+    radial-gradient(circle at top left, rgba(105, 216, 195, 0.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(105, 216, 195, 0.12), transparent 28%),
+    linear-gradient(180deg, #fbfdfc 0%, #f2f6f5 100%),
     var(--bg);
 }
 
@@ -32,6 +34,19 @@
 body {
   margin: 0;
   min-width: 320px;
+  color: var(--text);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(19, 33, 30, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(19, 33, 30, 0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.26), transparent 85%);
 }
 
 button,
@@ -75,14 +90,15 @@ button {
 
 .hero-copy h1 {
   font-size: clamp(3rem, 5vw, 5.8rem);
-  line-height: 0.95;
+  line-height: 0.92;
   margin: 14px 0 18px;
-  max-width: 10ch;
+  max-width: 9ch;
+  letter-spacing: -0.05em;
 }
 
 .hero-body {
-  font-size: 1.08rem;
-  max-width: 54ch;
+  font-size: 1.12rem;
+  max-width: 32ch;
   color: var(--muted);
 }
 
@@ -97,8 +113,9 @@ button {
   padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.55);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 251, 250, 0.75));
   min-width: 148px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .metric-card strong {
@@ -121,8 +138,11 @@ button {
 }
 
 .planner-panel {
-  border-radius: 28px;
+  border-radius: 30px;
   padding: 26px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 252, 251, 0.82)),
+    var(--panel);
 }
 
 .panel-header {
@@ -131,26 +151,29 @@ button {
 
 .panel-header h2 {
   margin: 6px 0 0;
-  font-size: 1.65rem;
+  font-size: 1.7rem;
+  letter-spacing: -0.03em;
 }
 
 .primary-button,
 .primary-link,
 .ghost-button,
 .chip {
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 999px;
   transition:
     transform 140ms ease,
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
 }
 
 .primary-button,
 .primary-link {
   background: var(--text);
   color: white;
-  padding: 14px 18px;
+  padding: 14px 20px;
   text-decoration: none;
   display: inline-flex;
   justify-content: center;
@@ -161,6 +184,7 @@ button {
 .primary-button {
   background: linear-gradient(135deg, var(--cta), var(--cta-strong));
   min-width: 220px;
+  box-shadow: 0 14px 30px rgba(236, 109, 43, 0.22);
 }
 
 .primary-button:hover,
@@ -168,6 +192,12 @@ button {
 .ghost-button:hover,
 .chip:hover {
   transform: translateY(-1px);
+}
+
+.primary-link {
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  color: #0f2722;
+  box-shadow: 0 14px 30px rgba(38, 183, 158, 0.16);
 }
 
 .primary-button:disabled {
@@ -199,7 +229,7 @@ button {
   width: 100%;
   border-radius: 18px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(250, 252, 252, 0.96);
   padding: 14px 16px;
   color: var(--text);
   outline: none;
@@ -231,10 +261,20 @@ button {
 .chip,
 .ghost-button,
 .trust-pill {
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(246, 250, 249, 0.92);
   color: var(--muted);
   padding: 10px 14px;
   border: 1px solid var(--line);
+}
+
+.chip {
+  color: var(--text);
+}
+
+.ghost-button,
+.trust-pill {
+  border-color: rgba(105, 216, 195, 0.28);
+  background: rgba(105, 216, 195, 0.1);
 }
 
 .results-grid {
@@ -275,16 +315,17 @@ button {
   color: var(--muted);
 }
 
+.summary-card h3,
+.table-card h3,
+.route-card h3,
+.matches-card h3 {
+  letter-spacing: -0.03em;
+}
+
 .fallback-note {
   margin: 10px 0 0;
   color: #8a5a12 !important;
   font-weight: 600;
-}
-
-.methodology-copy {
-  margin: 14px 0 0;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
 }
 
 .benchmark-grid {
@@ -297,6 +338,12 @@ button {
 .mini-stat {
   border-radius: 24px;
   padding: 20px;
+}
+
+.benchmark-hero {
+  background:
+    radial-gradient(circle at top right, rgba(105, 216, 195, 0.22), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 251, 250, 0.92));
 }
 
 .benchmark-number {
@@ -325,6 +372,7 @@ button {
   margin-top: 10px;
   font-size: 1.3rem;
   line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
 .section-heading {
@@ -394,7 +442,7 @@ button {
 .recruiter-card {
   padding: 18px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.62);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 251, 250, 0.84));
   border: 1px solid rgba(10, 44, 36, 0.08);
 }
 
@@ -427,27 +475,33 @@ button {
 }
 
 .badge-forest {
-  background: linear-gradient(135deg, #0d6b57, #1b3f35);
+  background: linear-gradient(135deg, #26b79e, #7be3d0);
+  color: #12312a;
 }
 
 .badge-navy {
-  background: linear-gradient(135deg, #3251a8, #1a2456);
+  background: linear-gradient(135deg, #8de9d9, #4dbba8);
+  color: #143830;
 }
 
 .badge-gold {
-  background: linear-gradient(135deg, #d4a24b, #7c5a1e);
+  background: linear-gradient(135deg, #7be3d0, #38bba4);
+  color: #12312a;
 }
 
 .badge-violet {
-  background: linear-gradient(135deg, #8452ff, #4d2e8c);
+  background: linear-gradient(135deg, #b3f2e7, #67d9c4);
+  color: #12312a;
 }
 
 .badge-sky {
-  background: linear-gradient(135deg, #4e9bd3, #25638e);
+  background: linear-gradient(135deg, #9ceee0, #52cab5);
+  color: #12312a;
 }
 
 .badge-rose {
-  background: linear-gradient(135deg, #d66f8d, #7f3248);
+  background: linear-gradient(135deg, #81e2d0, #31b69d);
+  color: #12312a;
 }
 
 .recruiter-headline {
@@ -479,7 +533,7 @@ button {
 
 .empty-state {
   border-color: var(--line);
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.72);
   color: var(--muted);
 }
 
