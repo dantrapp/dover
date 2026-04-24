@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 import {
+  inferFunction,
   PlannerForm,
   PlannerResult,
   planHiring,
@@ -70,6 +71,17 @@ export default function App() {
     void submitPlanner(form);
   }
 
+  function updateRoleTitle(roleTitle: string) {
+    setForm((current) => {
+      const inferredFunction = inferFunction(roleTitle);
+      return {
+        ...current,
+        roleTitle,
+        function: inferredFunction === 'Other' ? current.function : inferredFunction,
+      };
+    });
+  }
+
   const stageLabel = useMemo(
     () => `${form.companyStage} startup${form.companyStage === 'Series C+' ? '' : ''}`,
     [form.companyStage],
@@ -107,16 +119,13 @@ export default function App() {
               <p className="panel-kicker">What are you hiring for?</p>
               <h2>Build a hiring plan in under a minute.</h2>
             </div>
-            <button type="submit" className="primary-button" disabled={loading}>
-              {loading ? 'Planning…' : 'See my hiring plan'}
-            </button>
           </div>
 
           <label className="field">
             <span>Role</span>
             <input
               value={form.roleTitle}
-              onChange={(event) => setForm((current) => ({ ...current, roleTitle: event.target.value }))}
+              onChange={(event) => updateRoleTitle(event.target.value)}
               placeholder="Founding engineer"
             />
           </label>
@@ -206,11 +215,17 @@ export default function App() {
                 type="button"
                 key={exampleRole}
                 className="chip"
-                onClick={() => setForm((current) => ({ ...current, roleTitle: exampleRole }))}
+                onClick={() => updateRoleTitle(exampleRole)}
               >
                 {exampleRole}
               </button>
             ))}
+          </div>
+
+          <div className="planner-actions">
+            <button type="submit" className="primary-button planner-submit" disabled={loading}>
+              {loading ? 'Planning…' : 'See my hiring plan'}
+            </button>
           </div>
         </form>
       </section>

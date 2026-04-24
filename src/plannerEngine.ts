@@ -208,7 +208,7 @@ function normalizeRoleTitle(title: string) {
   );
 }
 
-function inferFunction(title: string) {
+export function inferFunction(title: string) {
   const normalized = normalizeRoleTitle(title);
   for (const [functionName, keywords] of Object.entries(functionKeywords)) {
     if (keywords.some((keyword) => normalized.includes(keyword))) {
@@ -383,7 +383,11 @@ function scoreRecruiter(recruiter: RecruiterSeedRecord, query: ReturnType<typeof
   if (recruiter.geo_focus.includes(query.location.cluster) || recruiter.geo_focus.includes('Remote')) score += 2;
   if (recruiter.hiring_priority_focus.includes(query.hiringPriority)) score += 2;
   const keywords = query.normalizedRoleTitle.split(' ');
-  if (keywords.some((keyword) => recruiter.sample_role.toLowerCase().includes(keyword))) score += 1;
+  const normalizedSampleRole = normalizeRoleTitle(recruiter.sample_role);
+  if (keywords.some((keyword) => keyword.length > 2 && normalizedSampleRole.includes(keyword))) score += 1.25;
+  if (query.function === 'Design' && recruiter.functions.includes('Design')) score += 2;
+  if (query.function === 'Product' && recruiter.functions.includes('Product')) score += 2;
+  if (query.function === 'GTM' && recruiter.functions.includes('GTM')) score += 2;
   return score;
 }
 
@@ -436,7 +440,7 @@ function buildRouteRecommendation(query: ReturnType<typeof buildQuery>, benchmar
 
 function buildSummary(query: ReturnType<typeof buildQuery>, benchmark: ReturnType<typeof buildBenchmark>) {
   const location = query.location.cluster || query.location.display || 'the market';
-  return `${query.companyStage} ${query.function.toLowerCase()} hiring in ${location} is clustering around ${benchmark.median} on Dover's marketplace. The strongest move is a self-serve estimate first, then an embedded recruiter match if you need speed plus process ownership.`;
+  return `${query.companyStage} ${query.function.toLowerCase()} hiring for ${query.roleTitle.toLowerCase()} in ${location} is clustering around ${benchmark.median} on Dover's marketplace. The strongest move is a self-serve estimate first, then a recruiter match calibrated to the role and the kind of help you need.`;
 }
 
 export function planHiring(form: PlannerForm): PlannerResult {
