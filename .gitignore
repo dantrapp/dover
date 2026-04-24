@@ -34,3 +34,7 @@ dist/
 
 # Tooling
 .vercel/
+
+# Local raw data exports
+dover_cost_per_hire.csv
+backend/dover_cost_per_hire.csv

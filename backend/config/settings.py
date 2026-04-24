@@ -146,7 +146,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PLANNER_DATASET_PATH = Path(
-    os.environ.get('PLANNER_DATASET_PATH', BASE_DIR / 'dover_cost_per_hire.csv')
+    os.environ.get('PLANNER_DATASET_PATH', BASE_DIR / 'planner' / 'data' / 'benchmark_hires.json')
 )
 
 CORS_ALLOWED_ORIGINS = [

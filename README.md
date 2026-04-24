@@ -8,7 +8,7 @@ The app helps a founder answer four questions before opening a search:
 - who should help first
 - whether Dover marketplace is the right route
 
-The demo is built from Dover's real public `901`-row cost-per-hire dataset and deployed as a working full-stack app.
+The demo is built from Dover's public `901`-row cost-per-hire dataset and deployed as a working full-stack app.
 
 ## Stack
 
@@ -16,7 +16,7 @@ The demo is built from Dover's real public `901`-row cost-per-hire dataset and d
 - Backend: Django + Django REST Framework
 - Database: Postgres
 - Deployment: Vercel + Neon
-- Data: CSV export of Dover's public Airtable data
+- Data: normalized benchmark seed data derived from Dover's public Airtable export
 
 ## Local development
 
@@ -41,15 +41,11 @@ Start the frontend:
 npm run dev
 ```
 
-## Data refresh
+## Seed data
 
-Rescrape the Airtable source into [dover_cost_per_hire.csv](/Users/dt/Desktop/codex/dover/dover_cost_per_hire.csv):
+The repo ships with a normalized benchmark seed at [backend/planner/data/benchmark_hires.json](/Users/dt/Desktop/codex/dover/backend/planner/data/benchmark_hires.json).
 
-```bash
-./venv/bin/python scrape_dover.py
-```
-
-Re-export the frontend fallback data artifacts:
+Re-export the frontend fallback data artifacts from that backend seed:
 
 ```bash
 ./venv/bin/python scripts/export_planner_data.py
@@ -102,4 +98,5 @@ That means Neon is populated on deploy without a separate manual import step.
 ## Notes
 
 - `.gitignore` excludes local databases, virtualenvs, build output, and `.env` files.
+- Raw source exports are intentionally not tracked in git.
 - The shipped app is Django-backed. The frontend JSON planner remains as a fallback path if the API is unavailable.
