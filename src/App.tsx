@@ -1,91 +1,13 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 
-type PlannerOptions = {
-  stages: string[];
-  functions: string[];
-  priorities: string[];
-  featuredCities: string[];
-  exampleRoles: string[];
-};
+import {
+  PlannerForm,
+  PlannerResult,
+  planHiring,
+  plannerOptions,
+} from './plannerEngine';
 
-type ComparableHire = {
-  roleTitle: string;
-  costPerHire: string;
-  companyStage: string;
-  companyLocation: string;
-  notableInvestors: string;
-  score: number;
-};
-
-type Benchmark = {
-  sampleSize: number;
-  confidenceLabel: string;
-  low: string;
-  median: string;
-  high: string;
-  comparables: ComparableHire[];
-};
-
-type RecruiterMatch = {
-  name: string;
-  location: string;
-  yearsExperience: number;
-  headline: string;
-  bio: string;
-  sampleRole: string;
-  sampleCost: string;
-  sampleStage: string;
-  accent: string;
-};
-
-type PlannerResult = {
-  query: {
-    roleTitle: string;
-    companyStage: string;
-    companyLocation: string;
-    function: string;
-    hiringPriority: string;
-    optionalContext: string;
-  };
-  benchmark: Benchmark;
-  recruiters: RecruiterMatch[];
-  routeRecommendation: {
-    label: string;
-    detail: string;
-    reasons: string[];
-  };
-  summary: string;
-  methodology: string;
-};
-
-type PlannerForm = {
-  roleTitle: string;
-  companyStage: string;
-  companyLocation: string;
-  function: string;
-  hiringPriority: string;
-  optionalContext: string;
-};
-
-const defaultOptions: PlannerOptions = {
-  stages: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C+'],
-  functions: ['Engineering', 'GTM', 'Product', 'Design', 'Ops', 'People', 'Clinical', 'Other'],
-  priorities: [
-    'Need pipeline',
-    'Need process help',
-    'Need full-cycle recruiter',
-    'Need a specialist search',
-    'Not sure',
-  ],
-  featuredCities: ['San Francisco, CA', 'New York, NY', 'Boston, MA', 'Austin, TX', 'Remote'],
-  exampleRoles: [
-    'Founding engineer',
-    'Senior backend engineer',
-    'Enterprise account executive',
-    'Product designer',
-    'Customer success manager',
-  ],
-};
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 const initialForm: PlannerForm = {
   roleTitle: 'Founding engineer',
@@ -106,36 +28,12 @@ const accentClass: Record<string, string> = {
   rose: 'badge-rose',
 };
 
-async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    ...options,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  return response.json() as Promise<T>;
-}
-
 export default function App() {
-  const [plannerOptions, setPlannerOptions] = useState<PlannerOptions>(defaultOptions);
   const [form, setForm] = useState<PlannerForm>(initialForm);
   const [result, setResult] = useState<PlannerResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [methodologyOpen, setMethodologyOpen] = useState(false);
-
-  useEffect(() => {
-    fetchJson<PlannerOptions>('/api/options/')
-      .then(setPlannerOptions)
-      .catch(() => {
-        // Keep sensible defaults if the API is not up yet.
-      });
-  }, []);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
     void submitPlanner(initialForm);
@@ -143,15 +41,25 @@ export default function App() {
 
   async function submitPlanner(nextForm: PlannerForm) {
     setLoading(true);
-    setError(null);
     try {
-      const plannerResult = await fetchJson<PlannerResult>('/api/planner/', {
+      const response = await fetch(`${apiBaseUrl}/api/planner/`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(nextForm),
       });
+
+      if (!response.ok) {
+        throw new Error(`Planner API returned ${response.status}`);
+      }
+
+      const plannerResult = (await response.json()) as PlannerResult;
       setResult(plannerResult);
-    } catch (submitError) {
-      setError('The planner could not load a result. Make sure the Django API is running on port 8000.');
+      setUsingFallback(false);
+    } catch (_error) {
+      setResult(planHiring(nextForm));
+      setUsingFallback(true);
     } finally {
       setLoading(false);
     }
@@ -307,8 +215,6 @@ export default function App() {
         </form>
       </section>
 
-      {error ? <div className="error-banner">{error}</div> : null}
-
       {result ? (
         <section className="results-grid">
           <div className="results-stack">
@@ -319,6 +225,11 @@ export default function App() {
                   {result.query.roleTitle} for a {stageLabel.toLowerCase()} in {result.query.companyLocation}
                 </h3>
               </div>
+              {usingFallback ? (
+                <p className="fallback-note">
+                  Running on the built-in planner engine because the Django API is not reachable.
+                </p>
+              ) : null}
               <p>{result.summary}</p>
               <button
                 type="button"
