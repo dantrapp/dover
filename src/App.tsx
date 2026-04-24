@@ -109,6 +109,14 @@ export default function App() {
               <strong>Under 1 min</strong>
             </div>
           </div>
+          <div className="hero-brief">
+            <p className="summary-label">What you get</p>
+            <ul className="hero-list">
+              <li>Estimated cost range from real marketplace hires</li>
+              <li>Closest comparable searches by stage and location</li>
+              <li>A first call on who should help and what route to take</li>
+            </ul>
+          </div>
         </div>
 
         <form className="planner-panel" onSubmit={handleSubmit}>
