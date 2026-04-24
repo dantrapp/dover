@@ -361,6 +361,24 @@ export default function App() {
                       Recent signal: {recruiter.sampleStage} team spent {recruiter.sampleCost} on{' '}
                       {recruiter.sampleRole}.
                     </div>
+                    <div className="recruiter-actions">
+                      <a
+                        className="card-link"
+                        href="https://www.dover.com/marketplace"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View in marketplace
+                      </a>
+                      <a
+                        className="card-link subtle"
+                        href="https://www.dover.com/marketplace"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Request intro
+                      </a>
+                    </div>
                   </article>
                 ))}
               </div>

@@ -93,15 +93,15 @@ button {
 }
 
 .hero-copy h1 {
-  font-size: clamp(2.9rem, 4.8vw, 5.25rem);
-  line-height: 0.9;
+  font-size: clamp(2.5rem, 4.1vw, 4.6rem);
+  line-height: 0.92;
   margin: 10px 0 16px;
-  max-width: 7.5ch;
+  max-width: 8ch;
   letter-spacing: -0.05em;
 }
 
 .hero-body {
-  font-size: 1.05rem;
+  font-size: 1rem;
   max-width: 24ch;
   color: var(--muted);
 }
@@ -575,6 +575,34 @@ button {
   border-top: 1px solid rgba(10, 44, 36, 0.08);
   color: var(--muted);
   font-size: 0.92rem;
+}
+
+.recruiter-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #0f2722;
+  background: linear-gradient(135deg, rgba(105, 216, 195, 0.9), rgba(38, 183, 158, 0.9));
+  box-shadow: 0 10px 22px rgba(38, 183, 158, 0.12);
+}
+
+.card-link.subtle {
+  background: rgba(246, 250, 249, 0.96);
+  border: 1px solid rgba(105, 216, 195, 0.28);
+  box-shadow: none;
+  color: var(--text);
 }
 
 .error-banner,
